@@ -8,22 +8,17 @@ import 'package:smart_keslassi_parent/utils/requete.dart';
 class Periode extends StatelessWidget {
   //
   Map eleve;
-  Map cour;
   //
   String anneescolaire;
   //
   Requete requete = Requete();
   //
-  Periode(this.eleve, this.cour, this.anneescolaire);
+  Periode(this.eleve, this.anneescolaire);
   //
   var box = GetStorage();
   //
   @override
   Widget build(BuildContext context) {
-    //
-    final libelle =
-        '${cour['niveau']} ${cour['cycle']}'
-        '${cour['section'] != null ? ' ${cour['section']}' : ''}';
     //
     Map user = box.read("user") ?? {};
     //List Liste = List<String>.from(jsonDecode(user['cours']));
@@ -32,13 +27,7 @@ class Periode extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: Text("Période(s)"), centerTitle: true),
       body: FutureBuilder(
-        future: getAllCours(
-          cour['niveau'],
-          cour['cycle'],
-          cour['section'],
-          cour['lettre'],
-          anneescolaire,
-        ),
+        future: getAllCours(eleve['classe'], anneescolaire),
         builder: (c, t) {
           if (t.hasData) {
             //
@@ -58,14 +47,14 @@ class Periode extends StatelessWidget {
                 return ListTile(
                   onTap: () {
                     //Get.back();
-                    Get.to(
-                      Eleves(
-                        enseignant,
-                        "$libelle ${periode['lettre']}",
-                        cour,
-                        periode,
-                      ),
-                    );
+                    // Get.to(
+                    //   Eleves(
+                    //     enseignant,
+                    //     "$libelle ${periode['lettre']}",
+                    //     cour,
+                    //     periode,
+                    //   ),
+                    // );
                   },
                   leading: CircleAvatar(
                     // backgroundImage: NetworkImage(
@@ -113,19 +102,13 @@ class Periode extends StatelessWidget {
   }
 
   //
-  Future<List> getAllCours(
-    String niveau,
-    cycle,
-    section,
-    lettre,
-    anneescolaire,
-  ) async {
+  Future<List> getAllCours(String classe, anneescolaire) async {
     //niveau, cycle, section, lettre, annee_scolaire
     List cours = [];
     //print('Classe: $cle');
     //
     Response response = await requete.getE(
-      "periodeservice/$niveau/$cycle/$section/$lettre/$anneescolaire",
+      "periodeservice/$classe/$anneescolaire",
     );
     //
     if (response.isOk) {
@@ -141,11 +124,8 @@ class Periode extends StatelessWidget {
       print('Erreur: ${response.body}');
     }
     //
-    final libelle =
-        '${cour['niveau']} ${cour['cycle']}'
-        '${cour['section'] != null ? ' ${cour['section']}' : ''}';
     //
-    List cs = box.read("periode$libelle") ?? [];
+    List cs = box.read("periode$classe") ?? [];
     if (cours.isNotEmpty) {
       cs = cours;
     }
@@ -154,7 +134,7 @@ class Periode extends StatelessWidget {
     //
     //cs.addAll(cours);
     //
-    box.write('periode$libelle', cs);
+    box.write('periode$classe', cs);
     return cs;
   }
 }

@@ -1,7 +1,15 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_barcode_scanner_plus/flutter_barcode_scanner_plus.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
+import 'package:get_storage/get_storage.dart';
+import 'package:smart_keslassi_parent/main.dart';
 import 'package:smart_keslassi_parent/pages/eleves/anneescolaire.dart';
+import 'package:smart_keslassi_parent/pages/scanner.dart';
+import 'package:smart_keslassi_parent/utils/requete.dart';
 
 class Accueil extends StatefulWidget {
   @override
@@ -17,6 +25,8 @@ class _Accueil extends State<Accueil> {
   //
   final PageController _promoController = PageController(viewportFraction: 0.8);
   int _currentPromoIndex = 0;
+  //
+  var box = GetStorage();
   //
   final List<Map> promotions = [
     {
@@ -55,6 +65,32 @@ class _Accueil extends State<Accueil> {
     "updatedAt": "2025-08-22T15:06:15.271346",
   };
   //
+
+  @override
+  void initState() {
+    //
+    eleves.value = box.read("eleves") ?? [];
+    //
+    eleves.add({
+      "id": 778215517658003700,
+      "nom": "Lungu",
+      "postnom": "Lungu",
+      "prenom": "Joel",
+      "sexe": "Masculin",
+      "dateNaissance": "1-9-2013",
+      "lieuNaissance": "Kinshasa",
+      "cle": "99410bb0-8f83-11f0-8a3f-677ff35b0ea6",
+      "numeroIdentifiant": "ELV-20250912-6484",
+      "dateEnregistrement": "12-9-2025",
+      "anneescolaire": "2025-2026",
+      "classe": "2ème Humanités générales & techniques Pédagogie Générale A",
+      "synced": false,
+      "updatedAt": "2025-09-12T03:53:02.317767",
+    });
+    //
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     //
@@ -100,58 +136,48 @@ class _Accueil extends State<Accueil> {
 
             // Boutons principaux
             Expanded(
-              child: ListView(
-                padding: const EdgeInsets.all(25.0),
-                children: [
-                  ListTile(
-                    leading: CircleAvatar(
-                      /*
+              child: Obx(
+                () => ListView(
+                  padding: const EdgeInsets.all(25.0),
+                  children: List.generate(eleves.length, (e) {
+                    Map eleve = eleves[e];
+                    //
+                    return ListTile(
+                      leading: CircleAvatar(
+                        /*
                         child: EleveWidgets.loadImage(
                         eleve['numeroIdentifiant'],
                       ),
                       */
-                      backgroundImage: NetworkImage(
-                        'https://randomuser.me/api/portraits/women/20.jpg',
+                        backgroundImage: NetworkImage(
+                          'https://randomuser.me/api/portraits/women/20.jpg',
+                        ),
+                        //child: Text(eleve['nom'][0])
                       ),
-                      //child: Text(eleve['nom'][0])
-                    ),
-                    title: Text(
-                      "${eleve['nom']} ${eleve['postnom']} ${eleve['prenom']}",
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                      ),
-                    ),
-                    subtitle: Text(
-                      eleve['classe'],
-                      style: TextStyle(
-                        fontSize: 10,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.blue,
-                      ),
-                    ),
-                    trailing: Icon(Icons.arrow_forward_ios),
-                    onTap: () {
-                      // Action sur clic
-                      /*
-                      eleve['categorie'] = ""; // widget.categorie;
-                      eleve['annee_scolaire'] = widget.annee_scolaire;
-                      //
-                      Map e = {
-                        "url":
-                        "https://randomuser.me/api/portraits/women/2${index + 1}.jpg",
-                        "categorie": widget.categorie,
-                        "annee_scolaire": widget.annee_scolaire,
-                        "nom":
+                      title: Text(
                         "${eleve['nom']} ${eleve['postnom']} ${eleve['prenom']}",
-                        "classe": eleve['classe'],
-                      };
-                      */
-                      Get.to(Anneescolaire(eleve));
-                    },
-                  ),
-                ],
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      ),
+                      subtitle: Text(
+                        eleve['classe'],
+                        style: TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.blue,
+                        ),
+                      ),
+                      trailing: Icon(Icons.arrow_forward_ios),
+                      onTap: () {
+                        // Action sur clic
+                        Get.to(Anneescolaire(eleve));
+                      },
+                    );
+                  }),
+                ),
               ),
             ),
           ],
@@ -160,64 +186,30 @@ class _Accueil extends State<Accueil> {
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           //
+          //Get.to(QRViewExample());
+          //
+          String barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
+            "red",
+            "Annuler",
+            true,
+            ScanMode.QR,
+          );
+          //
           Get.dialog(
             Center(
-              child: Card(
-                child: Container(
-                  padding: EdgeInsets.all(20),
-                  height: Get.height / 3.5,
-                  width: 270,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Code de l'élève",
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      TextField(
-                        textAlign: TextAlign.center,
-                        autofocus: true,
-                        decoration: InputDecoration(
-                          hintText: "Code de l'élève",
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: BorderSide(
-                              color: Colors.grey,
-                              width: 1,
-                            ),
-                          ),
-                        ),
-                      ),
-                      ElevatedButton(
-                        onPressed: () {
-                          //
-                          Get.back();
-                          //
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.blue,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                        ),
-                        child: Text(
-                          "Valider",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+              child: Container(
+                height: 30,
+                width: 30,
+                child: CircularProgressIndicator(),
               ),
             ),
           );
+          //
+          //
+          if (barcodeScanRes.isNotEmpty) {
+            _sendToServer(barcodeScanRes);
+          }
+          //
         },
         child: Icon(Icons.person_add_alt),
       ),
@@ -297,5 +289,43 @@ class _Accueil extends State<Accueil> {
         ),
       ),
     );
+  }
+
+  //
+  Future<void> _sendToServer(String code) async {
+    try {
+      final url = Uri.parse(
+        "${Requete.urlSt}/eleve/details/$code",
+      ); // <-- Change avec ton serveur
+      final response = await http.get(
+        url,
+        headers: {"Content-Type": "application/json"},
+        //body: jsonEncode({"qr_code": code}),
+      );
+
+      if (response.statusCode == 200) {
+        Get.back();
+        final data = jsonDecode(response.body);
+        print('data: $data');
+        //
+        List els = box.read("eleves") ?? [];
+        els.add(data);
+        //
+        box.write("eleves", els);
+        //
+        eleves.value = els;
+        //
+        Get.snackbar(
+          "Succès",
+          "Enregistrement éffectué: ${response.statusCode}",
+        );
+      } else {
+        Get.back();
+        Get.snackbar("Erreur", "Erreur: ${response.statusCode}");
+      }
+    } catch (e) {
+      Get.back();
+      Get.snackbar("Erreur", "Erreur: $e");
+    }
   }
 }

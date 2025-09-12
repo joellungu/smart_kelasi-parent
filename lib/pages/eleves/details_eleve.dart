@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:smart_keslassi_parent/pages/eleves/cours_points/periode.dart';
 import 'package:smart_keslassi_parent/pages/eleves/frais/frais.dart';
 import 'package:smart_keslassi_parent/pages/eleves/profile/profil.dart';
 
@@ -25,7 +26,7 @@ class DetailEleves extends StatelessWidget {
       'route': '/students',
     },
     {'title': 'Frais', 'icon': "HugeiconsEstimate01", 'route': '/courses'},
-    {'title': 'Parcours', 'icon': "HugeiconsChartUp", 'route': '/classes'},
+    //{'title': 'Parcours', 'icon': "HugeiconsChartUp", 'route': '/classes'},
     {'title': 'Conduite', 'icon': "HugeiconsProfile02", 'route': '/streams'},
     // {'title': 'Notes', 'icon': "HugeiconsNotebook02", 'route': '/streams'},
     {'title': 'Profile', 'icon': "HugeiconsUser02", 'route': '/streams'},
@@ -115,7 +116,9 @@ class DetailEleves extends StatelessWidget {
                             //
                           }
 
-                          if (e == 1) {}
+                          if (e == 1) {
+                            Get.to(Periode(eleve, anneescolaire));
+                          }
 
                           if (e == 2) {
                             Get.to(Frais(eleve, anneescolaire));

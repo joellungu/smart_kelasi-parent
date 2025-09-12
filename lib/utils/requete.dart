@@ -9,8 +9,10 @@ class Requete extends GetConnect {
   //192.168.100.129
   //10.176.160.134
   //192.168.11.109
-  String url = "http://192.168.11.101:8080/"; //
-  static String urlSt = "http://192.168.11.101:8080/";
+  //10.29.114.23
+  //192.168.11.111
+  String url = "http://192.168.11.111:8080/"; //
+  static String urlSt = "http://192.168.11.111:8080/";
   //
   Future<Response> getE(String path) async {
     return get("$url$path");

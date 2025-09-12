@@ -3,6 +3,9 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:smart_keslassi_parent/pages/accueil.dart';
 
+//
+RxList eleves = [].obs;
+
 void main() async {
   //
   WidgetsFlutterBinding.ensureInitialized();

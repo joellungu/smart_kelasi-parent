@@ -37,7 +37,9 @@ dependencies:
   get:
   get_storage:
   flutter_svg: ^2.2.0
+  flutter_barcode_scanner_plus: ^3.0.8
   intl: ^0.20.2
+  http: ^1.5.0
 
 dev_dependencies:
   flutter_test:
