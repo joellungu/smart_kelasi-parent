@@ -126,8 +126,6 @@ class DetailEleves extends StatelessWidget {
 
                           if (e == 3) {}
 
-                          if (e == 4) {}
-
                           // if (e == 5) {
                           //   eleve['option'] = adminMenu[e]['title'];
                           //   Get.to(Notes(eleve, classe));
@@ -135,7 +133,7 @@ class DetailEleves extends StatelessWidget {
 
                           //
 
-                          if (e == 5) {
+                          if (e == 4) {
                             //
                             Get.to(Profil(eleve));
                           }

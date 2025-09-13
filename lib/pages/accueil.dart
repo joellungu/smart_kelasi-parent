@@ -71,23 +71,6 @@ class _Accueil extends State<Accueil> {
     //
     eleves.value = box.read("eleves") ?? [];
     //
-    eleves.add({
-      "id": 778215517658003700,
-      "nom": "Lungu",
-      "postnom": "Lungu",
-      "prenom": "Joel",
-      "sexe": "Masculin",
-      "dateNaissance": "1-9-2013",
-      "lieuNaissance": "Kinshasa",
-      "cle": "99410bb0-8f83-11f0-8a3f-677ff35b0ea6",
-      "numeroIdentifiant": "ELV-20250912-6484",
-      "dateEnregistrement": "12-9-2025",
-      "anneescolaire": "2025-2026",
-      "classe": "2ème Humanités générales & techniques Pédagogie Générale A",
-      "synced": false,
-      "updatedAt": "2025-09-12T03:53:02.317767",
-    });
-    //
     super.initState();
   }
 

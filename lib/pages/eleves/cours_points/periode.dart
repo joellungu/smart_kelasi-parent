@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:smart_keslassi_parent/pages/eleves/cours_points/cours_points.dart';
+import 'package:smart_keslassi_parent/utils/periode.dart';
 import 'package:smart_keslassi_parent/utils/requete.dart';
 
 class Periode extends StatelessWidget {
@@ -45,16 +47,70 @@ class Periode extends StatelessWidget {
                     '${periode['section'] != null ? ' ${periode['section']}' : ''}';
                 //
                 return ListTile(
-                  onTap: () {
-                    //Get.back();
-                    // Get.to(
-                    //   Eleves(
-                    //     enseignant,
-                    //     "$libelle ${periode['lettre']}",
-                    //     cour,
-                    //     periode,
-                    //   ),
+                  onTap: () async {
+                    //
+                    //
+                    List<CourseResult> courseResults = [];
+                    //
+                    //iCl.value = index;
+                    //
+                    //nomPeriode = periode['nom'];
+                    //
+                    //print('truc; ${crs}');
+
+                    Map data = await getCoursParCat2(
+                      periode['niveau'],
+                      periode['cycle'],
+                      periode['section'],
+                      periode['lettre'],
+                      eleve['cle'],
+                      periode['cle'],
+                      anneescolaire,
+                    );
+                    //
+                    print(
+                      'Note(s); $data / ${periode['id']} / ${eleve['id']} // ${periode['niveau']} : ${periode['cycle']} : ${periode['section']} : ${periode['lettre']} : ',
+                    );
+                    //
+                    // List notes = json.decode(
+                    //   "${periode['notes'] ?? []}",
                     // );
+                    //
+                    double total = 0;
+                    double points = 0;
+                    //
+                    List notes = data['notes'] ?? [];
+                    //
+                    for (Map c in notes) {
+                      //
+                      total = total + double.parse("${c['total']}");
+                      points = points + double.parse("${c['point']}");
+                      //
+                      courseResults.add(
+                        CourseResult(
+                          c['cours'],
+                          double.parse("${c['point']}"),
+                          double.parse("${c['total']}"),
+                        ),
+                      );
+                    }
+                    //
+                    print('Points: $points / Total: $total /  ');
+                    //
+                    Period period = Period(
+                      periode['nom'],
+                      points,
+                      total,
+                      DateTime(2023, 10, 16),
+                      DateTime(2023, 12, 1),
+                      courseResults,
+                    );
+                    //Get.back();
+                    String pl = data['place'];
+                    //
+                    int place = pl.contains("-") ? 0 : int.parse(data['place']);
+                    //
+                    Get.to(CoursPoints(period, place));
                   },
                   leading: CircleAvatar(
                     // backgroundImage: NetworkImage(
@@ -135,6 +191,50 @@ class Periode extends StatelessWidget {
     //cs.addAll(cours);
     //
     box.write('periode$classe', cs);
+    return cs;
+  }
+
+  Future<Map> getCoursParCat2(
+    String niveau,
+    cycle,
+    section,
+    lettre,
+    idEleve,
+    idPeriode,
+    anneescolaire,
+  ) async {
+    //niveau, cycle, section, lettre, annee_scolaire
+    Map cours = {};
+    //print('Classe: $cle');
+    //
+    Response response = await requete.getE(
+      "notecoursobtenue/place?niveau=$niveau&cycle=$cycle&section=$section&lettre=$lettre&idEleve=$idEleve&idPeriode=$idPeriode&anneescolaire=$anneescolaire",
+    );
+    //
+    if (response.isOk) {
+      //
+      print('Succès: ${response.statusCode}');
+      print('Succès: ${response.body}');
+      //
+      //box.write("cours", response.body);
+      //
+      cours = response.body;
+    } else {
+      print('Erreur: ${response.statusCode}');
+      print('Erreur: ${response.body}');
+    }
+    //
+    //
+    Map cs = box.read("notecoursobtenue$idPeriode$idEleve") ?? {};
+    if (cours.isNotEmpty) {
+      cs = cours;
+    }
+    //
+    print("periodes: $cs");
+    //
+    //cs.addAll(cours);
+    //
+    box.write('notecoursobtenue$idPeriode$idEleve', cs);
     return cs;
   }
 }
