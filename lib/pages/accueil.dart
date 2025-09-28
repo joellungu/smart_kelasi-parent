@@ -298,6 +298,8 @@ class _Accueil extends State<Accueil> {
         //
         eleves.value = els;
         //
+        setState(() {});
+        //
         Get.snackbar(
           "Succès",
           "Enregistrement éffectué: ${response.statusCode}",

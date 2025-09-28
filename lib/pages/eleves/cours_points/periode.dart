@@ -108,7 +108,7 @@ class Periode extends StatelessWidget {
                     //Get.back();
                     String pl = data['place'];
                     //
-                    int place = pl.contains("-") ? 0 : int.parse(data['place']);
+                    String place = data['place'];
                     //
                     Get.to(CoursPoints(period, place));
                   },
@@ -205,11 +205,27 @@ class Periode extends StatelessWidget {
   ) async {
     //niveau, cycle, section, lettre, annee_scolaire
     Map cours = {};
-    //print('Classe: $cle');
-    //
-    Response response = await requete.getE(
+    print(
       "notecoursobtenue/place?niveau=$niveau&cycle=$cycle&section=$section&lettre=$lettre&idEleve=$idEleve&idPeriode=$idPeriode&anneescolaire=$anneescolaire",
     );
+    /**
+     * String niveau = data.get("niveau");
+        String cycle = data.get("cycle");
+        String section = data.get("section");
+        String lettre = data.get("lettre");
+        String idEleve = data.get("idEleve");
+        String idPeriode = data.get("idPeriode");
+        String anneescolaire = data.get("anneescolaire");
+     */
+    Response response = await requete.postE("notecoursobtenue/place", {
+      "niveau": niveau,
+      "cycle": cycle,
+      "section": section,
+      "lettre": lettre,
+      "idEleve": idEleve,
+      "idPeriode": idPeriode,
+      "anneescolaire": anneescolaire,
+    });
     //
     if (response.isOk) {
       //

@@ -4,7 +4,7 @@ import 'package:smart_keslassi_parent/utils/periode.dart';
 class CoursPoints extends StatelessWidget {
   //
   Period period;
-  int place;
+  String place;
   //
   CoursPoints(this.period, this.place);
   //
@@ -189,7 +189,7 @@ class CoursPoints extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('$place', style: TextStyle(color: Colors.blueGrey[600])),
+        Text(place, style: TextStyle(color: Colors.blueGrey[600])),
         SizedBox(height: 4),
         Text('Moyenne générale', style: TextStyle(fontWeight: FontWeight.bold)),
       ],
