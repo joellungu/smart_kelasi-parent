@@ -26,13 +26,14 @@ class DetailEleves extends StatelessWidget {
       'route': '/students',
     },
     {'title': 'Frais', 'icon': "HugeiconsEstimate01", 'route': '/courses'},
-    //{'title': 'Parcours', 'icon': "HugeiconsChartUp", 'route': '/classes'},
-    {'title': 'Conduite', 'icon': "HugeiconsProfile02", 'route': '/streams'},
-    // {'title': 'Notes', 'icon': "HugeiconsNotebook02", 'route': '/streams'},
+    {'title': 'Horaires', 'icon': "HugeiconsChartUp", 'route': '/classes'},
+    //{'title': 'Conduite', 'icon': "HugeiconsProfile02", 'route': '/streams'},
+    //{'title': 'Notes', 'icon': "HugeiconsNotebook02", 'route': '/streams'},
     {'title': 'Profile', 'icon': "HugeiconsUser02", 'route': '/streams'},
     // {'title': 'Paramètres', 'icon': Icons.settings, 'route': '/settings'},
     // {'title': 'Déconnexion', 'icon': Icons.logout, 'route': '/logout'},
   ];
+
   DetailEleves(this.eleve, this.anneescolaire) {
     //
   }

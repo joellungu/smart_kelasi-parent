@@ -164,7 +164,7 @@ class Periode extends StatelessWidget {
     //print('Classe: $cle');
     //
     Response response = await requete.getE(
-      "periodeservice/$classe/$anneescolaire",
+      "periodeservice/$classe/$anneescolaire/${eleve['cleEcole']}",
     );
     //
     if (response.isOk) {
@@ -181,7 +181,7 @@ class Periode extends StatelessWidget {
     }
     //
     //
-    List cs = box.read("periode$classe") ?? [];
+    List cs = box.read("periode$classe${eleve['cleEcole']}") ?? [];
     if (cours.isNotEmpty) {
       cs = cours;
     }
@@ -190,7 +190,7 @@ class Periode extends StatelessWidget {
     //
     //cs.addAll(cours);
     //
-    box.write('periode$classe', cs);
+    box.write('periode$classe${eleve['cleEcole']}', cs);
     return cs;
   }
 
